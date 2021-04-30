@@ -74,16 +74,18 @@ function devHTML() {
     .pipe(dest(options.paths.dist.base));
 }
 
-
-function devStyles() {
+function makeStyles() {
   const tailwindcss = require("tailwindcss");
   return src(`${options.paths.src.css}/**/*`)
     .pipe(sass().on("error", sass.logError))
     .pipe(
       postcss([tailwindcss(options.config.tailwindjs), require("autoprefixer")])
     )
-    .pipe(concat({ path: "style.css" }))
-    .pipe(dest(options.paths.dist.css));
+    .pipe(concat({ path: "style.css" }));
+}
+
+function devStyles() {
+  makeStyles().pipe(dest(options.paths.dist.css));
 }
 
 function devScripts() {
@@ -146,7 +148,7 @@ function prodHTML() {
 }
 
 function prodStyles() {
-  return src(`${options.paths.dist.css}/**/*`)
+  return makeStyles()
     .pipe(
       purgecss({
         content: ["src/**/*.{html,js}"],
