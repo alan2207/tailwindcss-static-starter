@@ -85,7 +85,7 @@ function makeStyles() {
 }
 
 function devStyles() {
-  makeStyles().pipe(dest(options.paths.dist.css));
+  return makeStyles().pipe(dest(options.paths.dist.css));
 }
 
 function devScripts() {
